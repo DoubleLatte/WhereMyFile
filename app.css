@@ -1,0 +1,242 @@
+/* page CSS: only inside the visuals (the app frame recipe, the tool's own controls and results, the step panels) */
+[hidden] { display: none !important; } /* a display rule must never beat the hidden attribute */
+html[lang="ko"] { word-break: keep-all; overflow-wrap: anywhere; } /* 한글은 어절 단위로 줄바꿈 ("설/치" 방지) */
+.hero__window .ui-win__age, .hero__window .ui-win__st { white-space: nowrap; overflow-wrap: normal; } /* "244.00 MB"가 쪼개지지 않게 */
+.hero h1 { text-wrap: balance; } /* 두 줄을 비슷한 길이로 */
+/* the preview window: wider size and waste columns so "244.00 MB" reads whole (desktop only; the kit's tablet/phone layout below 1024) */
+@media (min-width: 1024px) {
+  .hero__window .ui-win__cols, .hero__window .ui-win__row { grid-template-columns: 24px 56px minmax(0, 1fr) 88px 84px; }
+  .hero__window .ui-win__age { text-align: right; color: var(--u-ink); font-variant-numeric: tabular-nums; }
+  .hero__window .ui-win__cols > span:first-child { grid-column: 2; }
+  .hero__window .ui-win__cols > span:last-child { text-align: right; }
+}
+
+/* app-frame recipe (sections-library.md) */
+.app.ui { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); margin-top: var(--s-7); background: var(--u-bg); border: 1.5px solid var(--u-border); border-radius: var(--u-r); box-shadow: var(--u-shadow); }
+.app > .app__pane { position: relative; min-width: 0; min-height: 0; overflow: hidden; }
+.app > .app__pane + .app__pane { border-left: 1.5px solid var(--u-line); }
+@media (min-width: 1024px) and (max-width: 1279px) { .app.ui { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); } }
+@media (max-width: 1023px) {
+  .app.ui { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
+  .app > .app__pane + .app__pane { border-left: 0; border-top: 1.5px solid var(--u-line); }
+}
+
+/* the tool: a working window, so its panes scroll on their own (a folder can hold hundreds of groups) */
+.tool-controls, .tool-results { overflow-y: auto !important; padding: var(--s-6); color: var(--u-ink); font: 400 15px/1.5 var(--font-text); }
+.tool-controls { display: flex; flex-direction: column; gap: var(--s-4); }
+.drop { border: 2px dashed var(--u-border); border-radius: var(--u-r-sm, 10px); padding: var(--s-5); text-align: center; }
+.drop.over { border-color: var(--p-accent); background: color-mix(in srgb, var(--p-accent) 10%, transparent); }
+.drop__icon { width: 32px; height: 32px; fill: none; stroke: var(--p-accent); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; margin: 0 auto var(--s-2); display: block; }
+.drop__main { margin: 0 0 var(--s-4); font-weight: 500; }
+.drop__btns { display: flex; gap: var(--s-3); justify-content: center; flex-wrap: wrap; }
+.picked { margin: 0; color: var(--u-muted); font-size: 14px; }
+.field { display: flex; flex-direction: column; gap: var(--s-2); }
+.field label { font-size: 14px; font-weight: 500; color: var(--p-accent); }
+.field select { min-height: 44px; padding: 0 var(--s-3); border-radius: 8px; border: 1.5px solid var(--u-border); background: var(--u-bg); color: var(--u-ink); font: inherit; }
+.check { display: flex; align-items: center; gap: var(--s-3); min-height: 44px; }
+.check input { width: 18px; height: 18px; accent-color: var(--p-accent); }
+.tool-run { display: flex; gap: var(--s-3); flex-wrap: wrap; }
+.progress { display: flex; flex-direction: column; gap: var(--s-2); font-size: 14px; color: var(--u-muted); }
+.progress progress { width: 100%; height: 8px; accent-color: var(--p-accent); }
+
+.empty { display: grid; place-content: center; min-height: 100%; color: var(--u-muted); padding: var(--s-7); }
+.empty__title { color: var(--u-ink); font-size: 20px; font-weight: 500; margin: 0 0 var(--s-5); }
+.empty__steps { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s-3); }
+.empty__steps li { display: flex; align-items: center; gap: var(--s-4); padding: var(--s-4); border: 1.5px solid var(--u-line); border-radius: 8px; }
+.empty__steps span { flex: none; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font: 500 13px/1 var(--font-mono); color: var(--p-accent-ink); background: var(--p-accent); }
+.headline { font-size: 20px; font-weight: 500; margin: 0 0 var(--s-5); }
+.size { color: var(--p-accent); font-variant-numeric: tabular-nums; }
+/* 통계: 칸 블록 대신 "이름 ........ 값" 두 열 목록 (한 줄에 하나씩 읽힘) */
+.stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--s-7); row-gap: 0; margin: 0 0 var(--s-6); }
+.stats > div { display: flex; flex-direction: row; justify-content: space-between; align-items: baseline; gap: var(--s-4); padding: var(--s-3) 0; border-bottom: 1.5px solid var(--u-line); }
+.stats dt { color: var(--u-muted); font-size: 15px; white-space: nowrap; }
+.stats dd { margin: 0; text-align: right; font-size: 16px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.stats__sub { color: var(--u-muted); font-weight: 400; font-size: 14px; }
+@media (max-width: 767px) { .stats { grid-template-columns: minmax(0, 1fr); } }
+.result-actions { display: flex; align-items: center; gap: var(--s-4); flex-wrap: wrap; margin-bottom: var(--s-5); }
+.issues { border-left: 3px solid #f0c75e; padding: var(--s-2) var(--s-4); margin-bottom: var(--s-5); font-size: 14px; }
+.issues ul { margin: var(--s-2) 0 0; padding-left: var(--s-5); word-break: break-all; }
+.issues .err { color: #ff8a80; } .issues .warn { color: #f0c75e; }
+details.group { border: 1.5px solid var(--u-line); border-radius: 8px; margin-bottom: var(--s-3); }
+details.group summary { cursor: pointer; padding: var(--s-3) var(--s-4); min-height: 44px; display: flex; align-items: center; gap: var(--s-2); flex-wrap: wrap; }
+.files { list-style: none; margin: 0; padding: 0 var(--s-2) var(--s-3); }
+.files__row { cursor: pointer; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: var(--s-3); align-items: center; padding: var(--s-2) var(--s-3); border-radius: 6px; min-height: 44px; }
+.files li { border-radius: 6px; }
+.files li.keep { background: color-mix(in srgb, var(--p-accent) 12%, transparent); }
+.files input { width: 18px; height: 18px; accent-color: var(--p-accent); }
+.files .path { word-break: break-all; }
+.files .meta { color: var(--u-muted); font-size: 13px; white-space: nowrap; }
+.tag { font-size: 13px; font-weight: 500; padding: 1px 8px; border-radius: 99px; margin-right: var(--s-2); }
+.tag.keep { background: var(--p-accent); color: var(--p-accent-ink); }
+.tag.copy { border: 1.5px solid var(--u-border); color: var(--u-muted); }
+@media (max-width: 1023px) { .tool-controls { max-height: none; } .tool-results { min-height: 360px; } }
+@media (max-width: 639px) {
+  .empty { padding: var(--s-4) 0; place-content: start stretch; }
+  .files__row { grid-template-columns: auto minmax(0, 1fr); }
+  .files .meta { grid-column: 2; white-space: normal; }
+  .tool-controls, .tool-results { padding: var(--s-5); }
+}
+
+/* the three step panels: small drawn pieces of the result, one per step */
+#how .panel { --p-h: 340px; display: grid; place-items: center; }
+@media (max-width: 639px) { #how .panel { --p-h: 200px; } }
+@media (min-width: 1024px) and (max-width: 1279px) { #how .panel { --p-h: 200px; } } /* 1024x768 한 화면에 맞춤 */
+.step-num { font: 500 14px/1 var(--font-mono); color: var(--muted); }
+.mini { width: min(88%, 340px); display: grid; gap: var(--s-3); font-size: 15px; }
+.mini { color: #14120d; } /* 단계 그림은 두 테마 모두 밝은 패널 위: 색을 고정 */
+.mini__row { display: flex; justify-content: space-between; gap: var(--s-3); padding: var(--s-3) var(--s-4); border-radius: 8px; background: #ffffff; border: 1.5px solid rgb(20 18 13 / .24); }
+.mini__row b { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mini__row span { color: #6b6457; white-space: nowrap; }
+.mini__row.is-off { opacity: .55; }
+.mini__row.is-keep { border-color: currentColor; }
+.bytes { display: grid; grid-template-columns: 44px repeat(4, 1fr); gap: 6px; align-items: center; }
+.bytes b { font-size: 13px; font-weight: 500; color: #6b6457; }
+.bytes i { height: 28px; border-radius: 6px; background: #cfc6b2; }
+.bytes i.diff { background: #d9534f; }
+.mini__note { margin: var(--s-2) 0 0; color: #4a4437; }
+
+/* section heights the stacked content needs (layout-v4.md: the one page-CSS rule per section) */
+@media (min-width: 640px) and (max-width: 1023px) { #how { --h: 2; } }
+@media (max-width: 639px) { #faq .grid > .span-5 > p { display: none; } } /* 휴대폰에서 질문 섹션을 한 화면에 맞춤 */
+/* 테마 변경 스위치: 내비게이션 바에 직접 두어 모든 폭에서 보임 */
+.theme-switch { display: inline-flex; align-items: center; flex: none; margin-left: auto; border: 1.5px solid color-mix(in srgb, var(--p-ink) 30%, transparent); border-radius: 99px; padding: 3px; gap: 2px; }
+.theme-switch__label { padding: 0 6px 0 10px; font: 500 13px/1 var(--font-text); color: var(--p-muted); }
+.theme-switch button { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 12px; border: 0; border-radius: 99px; background: transparent; color: var(--p-muted); font: 500 13px/1 var(--font-text); cursor: pointer; white-space: nowrap; }
+.theme-switch button[aria-pressed="true"] { background: var(--p-accent); color: var(--p-accent-ink); }
+.theme-switch button:focus-visible { outline: 2px solid var(--p-accent); outline-offset: 2px; }
+.sw { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #d4af37; flex: none; }
+.sw--gray { background: #1e1f22; } .sw--white { background: #faf8f2; }
+.theme-switch + .nav__actions, .nav:not(.is-open) .theme-switch + .nav__actions { margin-left: 0; }
+@media (max-width: 1279px) { .theme-switch__label { display: none; } }
+@media (max-width: 1023px) { .theme-switch__name { display: none; } .theme-switch button { min-width: 44px; min-height: 44px; padding: 0; justify-content: center; } .sw { width: 16px; height: 16px; } }
+/* 휴대폰: 바 공간이 좁아 바의 "폴더 검사하기"는 숨김 (같은 버튼이 첫 화면에 있음) */
+@media (max-width: 639px) { .nav:not(.is-open) .nav__actions { display: none !important; } .theme-switch { margin-left: auto; } }
+/* 첫 화면 결과 창: 테마 색을 그대로 쓰는 창이 액자 아래까지 이어짐 (베이지 위 베이지로 흐리던 문제) */
+.hero--centred .hero__window {
+  background: radial-gradient(120% 100% at 50% 0%, color-mix(in srgb, var(--p-accent) 20%, var(--p-surface)), var(--p-surface) 72%);
+  border: 1.5px solid color-mix(in srgb, var(--p-accent) 45%, transparent);
+  --fx-bg: var(--p-bg); --fx-surface: var(--p-surface); --fx-ink: var(--p-ink); --fx-muted: var(--p-muted); --fx-accent: var(--p-accent);
+}
+.hero--centred .hero__window > .ly-piece { width: min(1040px, calc(100% - 2 * var(--s-6))); bottom: calc(-1 * var(--s-8)); display: flex; flex-direction: column; }
+.hero--centred .hero__window .ui-win__body { flex: 1; }
+.hero__window .ui-win__row.is-copy .ui-win__who { color: var(--u-muted); }
+@media (max-width: 639px) { .hero--centred .hero__window > .ly-piece { bottom: calc(-1 * var(--s-6)); } .hero__window .ui-win__search { display: none; } }
+/* 페이지 전체 끌어다 놓기 안내 */
+.drop-overlay { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; pointer-events: none;
+  background: color-mix(in srgb, var(--p-bg) 82%, transparent); outline: 3px dashed var(--p-accent); outline-offset: -16px; }
+.drop-overlay__text { margin: 0; padding: var(--s-5) var(--s-7); border-radius: 99px; background: var(--p-accent); color: var(--p-accent-ink); font: 500 20px/1.3 var(--font-text); }
+/* 선을 전체적으로 진하게: 페이지 구분선(--line)과 창 안의 선(--u-line, --u-border). 각 바탕의 글자색 기준이라 두 테마 모두 맞음 */
+html, html :is(.ground-inverse, .footer--dark) { --line: color-mix(in oklab, var(--ink) 24%, transparent); --line-strong: color-mix(in oklab, var(--ink) 38%, transparent); }
+.ui { --u-line: color-mix(in oklab, var(--u-ink) 20%, transparent); --u-border: color-mix(in oklab, var(--u-ink) 30%, transparent); }
+/* 모바일: iPhone은 16px 미만 입력칸을 누르면 화면을 확대하므로 16px */
+.field select { font-size: 16px; }
+/* 터치 기기: 끌어다 놓기와 폴더 선택이 대부분 안 되므로 숨기고 "파일 고르기"만 (PC 문구는 그대로) */
+@media (hover: none) and (pointer: coarse) {
+  .drop__main, .pick-dir { display: none; }
+  .drop { border-style: solid; }
+}
+
+/* Android and narrow screens: let content set the height, with one page scroll. */
+.touch-only { display: none; }
+.pick-help { margin: 16px 0 0; color: var(--u-muted); font-size: 14px; line-height: 1.6; }
+.field, .field select, .stats dd { min-width: 0; }
+.field select { max-width: 100%; }
+.group__name { flex-basis: 100%; min-width: 0; color: var(--u-muted); overflow-wrap: anywhere; font-size: 14px; }
+.pick-button:focus-visible { outline: 2px solid var(--p-accent); outline-offset: 4px; }
+@media (hover: none) and (pointer: coarse) {
+  .touch-only { display: block; }
+  .drop__main.touch-only { display: block; margin-bottom: 16px; }
+  .desktop-only { display: none; }
+  .drop__btns > .pick-button:not(.pick-dir) { width: 100%; background: var(--p-accent); color: var(--p-accent-ink); border-color: transparent; text-decoration: none; }
+  .drop__btns > .pick-button:not(.pick-dir)::after { content: none; }
+}
+@media (max-width: 1023px) {
+  main > section.section:not(.hero, .section--hero), footer.closing { height: auto; min-height: 0; padding-block: 64px; }
+  main > section.section > .wrap, footer.closing > .wrap { height: auto; flex: none; }
+  main > section.hero { height: auto; min-height: 0; padding-top: calc(var(--nav) + 32px); padding-bottom: 40px; }
+  main > section.hero > .wrap, .hero > .wrap > .hero-text { height: auto; }
+  main > section#app > .wrap > .app.fill { flex: none; min-height: 0; }
+  .app.ui { grid-template-rows: auto auto; margin-top: 24px; }
+  .app > .tool-controls, .app > .tool-results { overflow: visible !important; max-height: none; min-height: 0; }
+  .empty { min-height: 0; padding: 8px 0; }
+  #how .steps { row-gap: 32px; }
+  #how .panel { --p-h: 200px; }
+  .hero--centred .hero__window { flex: none; height: 300px; min-height: 0; }
+  .theme-switch + .nav__actions + .nav__toggle { margin-left: 0; }
+  #app, #results, #how, #faq { scroll-margin-top: calc(var(--nav) + 16px); }
+}
+@media (max-width: 639px) {
+  :root { --gut: 16px; }
+  .wrap { padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px); }
+  .nav__bar { gap: 6px; }
+  .nav__bar > .nav__logo { min-width: 0; flex: 1; font-size: clamp(1rem, 0.5rem + 2.2vw, 1.25rem); }
+  .nav__bar .theme-switch { margin-left: 0; padding: 0; gap: 0; border: 0; }
+  .nav__bar .theme-switch button { min-width: 44px; min-height: 44px; }
+  .nav__bar .nav__toggle { margin-left: 0; }
+  .hero--centred .hero__c { gap: 16px; }
+  .hero h1 { font-size: clamp(2rem, 1rem + 4.4vw, 2.5rem); line-height: 1.2; letter-spacing: -0.04em; }
+  .hero .hero__lead { font-size: 16px; line-height: 1.7; }
+  .hero .pill { flex-wrap: wrap; justify-content: center; gap: 4px 8px; padding: 8px 12px; font-size: 12px; }
+  .hero .btn-row > .btn { width: 100%; min-height: 48px; }
+  .hero--centred .hero__window { height: 260px; margin-top: 24px; mask-image: none; -webkit-mask-image: none; }
+  .hero--centred .hero__window > .ly-piece { inset: 12px; width: auto; transform: none; }
+  .hero__window .ui-win__body { min-height: 0; }
+  .hero__window .ui-win__row { height: 48px; }
+  .hero__window .ui-win__row:nth-child(n+5) { display: none; }
+  main > section.section:not(.hero, .section--hero), footer.closing { padding-block: 48px; }
+  .section h2, .closing h2 { font-size: clamp(1.625rem, 0.875rem + 3.5vw, 2rem); line-height: 1.3; }
+  .tool-controls, .tool-results { padding: 20px 16px; font-size: 16px; }
+  .drop { padding: 20px 16px; }
+  .drop__btns { flex-direction: column; gap: 8px; }
+  .drop__btns .btn { min-height: 48px; width: 100%; }
+  .tool-run { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .tool-run .btn, .result-actions .btn { width: 100%; min-height: 48px; }
+  .field select { min-height: 48px; }
+  .stats > div { gap: 12px; align-items: start; }
+  .stats dt { white-space: normal; flex: 0 1 42%; font-size: 14px; }
+  .stats dd { flex: 1; font-size: 15px; overflow-wrap: anywhere; }
+  .stats__sub { display: block; font-size: 13px; }
+  .empty__title, .headline { font-size: 18px; line-height: 1.5; }
+  .empty__steps li { align-items: flex-start; gap: 12px; padding: 12px; font-size: 14px; }
+  .result-actions { gap: 12px; }
+  details.group summary { padding: 14px 12px; gap: 6px; font-size: 14px; }
+  .files__row { padding: 12px 8px; gap: 8px; align-items: start; }
+  .files input { margin-top: 3px; }
+  .files .path { font-size: 14px; word-break: normal; overflow-wrap: anywhere; }
+  .tag { display: inline-block; margin-bottom: 4px; }
+  .closing__cta .btn--wide { max-width: 100%; min-height: 56px; font-size: 20px; }
+}
+@media (max-width: 359px) { .nav__bar > .nav__logo .mark { display: none; } }
+
+@media (max-width: 1023px) {
+  :root { --nav: calc(72px + env(safe-area-inset-top, 0px)); }
+  html { scroll-padding-top: calc(var(--nav) + 16px); }
+  .nav { padding-top: env(safe-area-inset-top, 0px); }
+}
+@media (max-width: 639px) { :root { --nav: calc(56px + env(safe-area-inset-top, 0px)); } }
+
+/* Desktop sections follow their content, rather than reserving a full screen. */
+@media (min-width: 1024px) {
+  main > section.section:not(.hero, .section--hero), footer.closing {
+    height: auto; min-height: 0; padding-block: 64px;
+  }
+  main > section.section > .wrap, footer.closing > .wrap { height: auto; flex: none; }
+  main > section.hero { height: auto; min-height: 0; padding-top: calc(var(--nav) + 40px); padding-bottom: 40px; }
+  main > section.hero > .wrap, .hero > .wrap > .hero-text { height: auto; }
+  .hero--centred .hero__window { flex: none; height: 320px; min-height: 0; }
+  main > section#app > .wrap > .app.fill { flex: none; min-height: 0; }
+  .app.ui { margin-top: 32px; }
+  .app > .tool-controls, .app > .tool-results { max-height: 40rem; }
+  .empty { min-height: 0; padding: 16px; }
+  #how .panel { --p-h: 240px; }
+  #how .section-head { margin-bottom: 32px; }
+  footer.closing > .wrap { grid-template-rows: auto auto; row-gap: 48px; }
+  .closing__cta { flex-direction: row; align-items: center; justify-content: space-between; gap: 32px; }
+  .closing__cta.close--type > .btn--xl { width: auto; align-self: center; min-height: 52px; height: auto; padding: 16px 24px; font-size: 20px; white-space: normal; }
+  #faq > .wrap > .grid { display: block; }
+  #faq .stack-4 { display: flex; align-items: baseline; justify-content: space-between; gap: 32px; margin-bottom: 24px; }
+  #faq .stack-4 > p { margin-top: 0; }
+  #faq .faq { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 40px; }
+  #faq .faq__item { padding-block: 24px; }
+  #app, #how, #faq { scroll-margin-top: var(--nav); }
+}
